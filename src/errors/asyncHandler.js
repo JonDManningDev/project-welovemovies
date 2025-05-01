@@ -3,3 +3,5 @@ function asyncHandler(delegate) {
     Promise.resolve(delegate(req, res, next)).catch(next);
   };
 }
+
+module.exports = asyncHandler;
