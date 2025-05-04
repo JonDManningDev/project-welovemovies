@@ -1,6 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.createTable('movies', (table) => {
-    table.increments('movie_id').primary();
+    table.increments('movie_id').primary().unsigned().notNullable();
     table.string('title');
     table.integer('runtime_in_minutes');
     table.string('rating');
