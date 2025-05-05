@@ -4,6 +4,15 @@ const mapProperties = require("../utils/map-properties");
 
 const tableName = "movies";
 
+const addCritic = mapProperties({
+  critic_id: "critic.critic_id",
+  preferred_name: "critic.preferred_name",
+  surname: "critic.surname",
+  organization_name: "critic.organization_name",
+  critic_created_at: "critic.created_at",
+  critic_updated_at: "critic.updated_at",
+});
+
 function list(query) {
   if (query.is_showing === "true") {
     return knex(`${tableName} as m`)
@@ -30,7 +39,7 @@ function listMovieInTheaters(movieId) {
 }
 
 async function listMovieReviews(movieId) {
-  const unformatted = await knex(`${tableName} as m`)
+  const unformattedArr = await knex(`${tableName} as m`)
     .join("reviews as r", "m.movie_id", "r.movie_id")
     .join("critics as c", "r.critic_id", "c.critic_id")
     .select(
@@ -44,16 +53,7 @@ async function listMovieReviews(movieId) {
     )
     .where({ "m.movie_id": movieId });
 
-  const addCritic = mapProperties({
-    critic_id: "critic.critic_id",
-    preferred_name: "critic.preferred_name",
-    surname: "critic.surname",
-    organization_name: "critic.organization_name",
-    critic_created_at: "critic.created_at",
-    critic_updated_at: "critic.updated_at",
-  });
-
-  return unformatted.map((row) => {
+  return unformattedArr.map((row) => {
     return addCritic({
       ...row,
     });
